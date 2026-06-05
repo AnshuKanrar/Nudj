@@ -1,4 +1,4 @@
-package com.tpc.nudj.navigation
+package com.tpc.nudj.ui.navigation
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
