@@ -23,7 +23,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.tpc.nudj.ui.theme.NudjTheme
 
 @Composable
@@ -49,6 +48,7 @@ fun NudjTextField(
             onValueChange = onValueChange,
             placeholder = { if (placeholder.isNotEmpty()) Text(text = placeholder,
                 style = MaterialTheme.typography.bodyLarge) },
+
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
             visualTransformation = if (isPassword) PasswordVisualTransformation(mask = '*') else VisualTransformation.None,
