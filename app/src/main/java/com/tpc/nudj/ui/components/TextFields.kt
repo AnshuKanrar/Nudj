@@ -1,4 +1,4 @@
-package com.tpc.nudj.ui.components // CHANGED: Moved the package to ui.components as requested
+package com.tpc.nudj.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable // CHANGED: Imported rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,9 +28,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-// CHANGED: Deleted the incorrect 'androidx.lint.kotlin.metadata.Visibility' import here
 import com.tpc.nudj.ui.theme.NudjTheme
-
 
 @Composable
 fun NudjTextField(
@@ -73,19 +71,7 @@ fun NudjTextField(
     }
 }
 
-
-@Composable
-fun GeneralTextField(value: String,
-                     onValueChange: (String) -> Unit,
-                     label: String,
-                     placeholder: String = ""){
-    NudjTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = label,
-        placeholder = placeholder
-    )
-}
+// CHANGED: Removed GeneralTextField completely
 
 @Composable
 fun EmailTextField(value: String, onValueChange: (String) -> Unit){
@@ -102,8 +88,6 @@ fun PasswordTextField(
     passwordVisible: Boolean,
     onPasswordVisibilityToggle: () -> Unit
 ) {
-    // CHANGED: Completely removed the internal 'remember' state to hoist logic to the parent
-
     NudjTextField(
         value = value,
         onValueChange = onValueChange,
@@ -117,7 +101,6 @@ fun PasswordTextField(
                 Icons.Filled.VisibilityOff
             }
 
-            // CHANGED: Replaced the local state mutation with the passed lambda function
             IconButton(onClick = onPasswordVisibilityToggle) {
                 Icon(imageVector = image, contentDescription = "Toggle password visibility")
             }
@@ -127,7 +110,6 @@ fun PasswordTextField(
 
 @Composable
 fun TextFieldPreview() {
-    // CHANGED: Swapped 'remember' for 'rememberSaveable' for all preview states
     var emailText by rememberSaveable { mutableStateOf("") }
     var passwordText by rememberSaveable { mutableStateOf("") }
     var clubText by rememberSaveable { mutableStateOf("") }
@@ -139,18 +121,20 @@ fun TextFieldPreview() {
     ) {
         EmailTextField(value = emailText, onValueChange = { emailText = it })
 
-        // CHANGED: Passed the new state and toggle function
         PasswordTextField(
             value = passwordText,
             onValueChange = { passwordText = it },
             passwordVisible = passwordVisible,
             onPasswordVisibilityToggle = { passwordVisible = !passwordVisible }
         )
-
-        GeneralTextField(value = clubText, onValueChange = { clubText = it }, label = "Club Name")
+        
+        NudjTextField(
+            value = clubText,
+            onValueChange = { clubText = it },
+            label = "Club Name"
+        )
     }
 }
-
 
 @Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
