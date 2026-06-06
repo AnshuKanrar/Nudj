@@ -1,7 +1,7 @@
 package com.tpc.nudj.ui.components
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -71,14 +71,14 @@ fun NudjTextField(
     }
 }
 
-// CHANGED: Removed GeneralTextField completely
-
 @Composable
-fun EmailTextField(value: String, onValueChange: (String) -> Unit){
-    NudjTextField(value = value,
+fun EmailTextField(value: String, onValueChange: (String) -> Unit) {
+    NudjTextField(
+        value = value,
         onValueChange = onValueChange,
         label = "Email",
-        keyboardType = KeyboardType.Email)
+        keyboardType = KeyboardType.Email
+    )
 }
 
 @Composable
@@ -108,46 +108,54 @@ fun PasswordTextField(
     )
 }
 
+@Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun TextFieldPreview() {
-    var emailText by rememberSaveable { mutableStateOf("") }
-    var passwordText by rememberSaveable { mutableStateOf("") }
-    var clubText by rememberSaveable { mutableStateOf("") }
-    var passwordVisible by rememberSaveable { mutableStateOf(false) }
-
-    Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.padding(16.dp)
-    ) {
-        EmailTextField(value = emailText, onValueChange = { emailText = it })
-
-        PasswordTextField(
-            value = passwordText,
-            onValueChange = { passwordText = it },
-            passwordVisible = passwordVisible,
-            onPasswordVisibilityToggle = { passwordVisible = !passwordVisible }
-        )
-        
-        NudjTextField(
-            value = clubText,
-            onValueChange = { clubText = it },
-            label = "Club Name"
-        )
+fun NudjTextFieldPreview() {
+    var text by rememberSaveable { mutableStateOf("") }
+    NudjTheme {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            Box(modifier = Modifier.padding(16.dp)) {
+                NudjTextField(
+                    value = text,
+                    onValueChange = { text = it },
+                    label = "Club Name"
+                )
+            }
+        }
     }
 }
 
 @Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun TextFieldsPreviewLight() {
+fun EmailTextFieldPreview() {
+    var emailText by rememberSaveable { mutableStateOf("") }
     NudjTheme {
-        Surface(color = MaterialTheme.colorScheme.background) { TextFieldPreview() }
+        Surface(color = MaterialTheme.colorScheme.background) {
+            Box(modifier = Modifier.padding(16.dp)) {
+                EmailTextField(value = emailText, onValueChange = { emailText = it })
+            }
+        }
     }
 }
 
+@Preview(name = "Light Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun TextFieldsPreviewDark() {
+fun PasswordTextFieldPreview() {
+    var passwordText by rememberSaveable { mutableStateOf("") }
+    var passwordVisible by rememberSaveable { mutableStateOf(false) }
     NudjTheme {
-        Surface(color = MaterialTheme.colorScheme.background) { TextFieldPreview() }
+        Surface(color = MaterialTheme.colorScheme.background) {
+            Box(modifier = Modifier.padding(16.dp)) {
+                PasswordTextField(
+                    value = passwordText,
+                    onValueChange = { passwordText = it },
+                    passwordVisible = passwordVisible,
+                    onPasswordVisibilityToggle = { passwordVisible = !passwordVisible }
+                )
+            }
+        }
     }
 }
