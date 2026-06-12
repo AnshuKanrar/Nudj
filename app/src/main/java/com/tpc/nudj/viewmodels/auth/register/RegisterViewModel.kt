@@ -26,4 +26,19 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
     fun onConfirmPasswordChange(newPassword: String) {
         _registerUiState.update { it.copy(confirmPassword = newPassword) }
     }
+
+    fun onRegisterClick() {}
+
+    fun onGoogleClick() {}
+
+    fun onPasswordVisibilityToggle(){
+        _registerUiState.update { it.copy(isPasswordVisible = !it.isPasswordVisible) }
+    }
+
+    fun onConfirmPasswordVisibilityToggle(){
+        _registerUiState.update { it.copy(isConfirmPasswordVisible = !it.isConfirmPasswordVisible) }
+    }
+
+
+
 }

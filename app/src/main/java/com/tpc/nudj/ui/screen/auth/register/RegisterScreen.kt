@@ -10,9 +10,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpc.nudj.R
 import com.tpc.nudj.ui.components.EmailTextField
 import com.tpc.nudj.ui.components.NudjTopAppBar
@@ -32,7 +30,7 @@ import com.tpc.nudj.viewmodels.auth.register.RegisterViewModel
 @Composable
 fun RegisterScreen(
     viewmodel: RegisterViewModel = hiltViewModel(),
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
 ) {
     val uiState by viewmodel.registerUiState.collectAsStateWithLifecycle()
 
@@ -41,8 +39,12 @@ fun RegisterScreen(
         onEmailInput = { email -> viewmodel.onEmailChange(email) },
         onPasswordInput = { pass -> viewmodel.onPasswordChange(pass) },
         onConfirmPasswordInput = { pass -> viewmodel.onConfirmPasswordChange(pass) },
-        onSignUpClick = {},
-        onGoogleClick =  {},
+        isPasswordVisible = uiState.isPasswordVisible,
+        isConfirmPasswordVisible = uiState.isConfirmPasswordVisible,
+        onPasswordVisibilityToggle = { viewmodel.onPasswordVisibilityToggle() },
+        onConfirmPasswordVisibilityToggle = { viewmodel.onConfirmPasswordVisibilityToggle() },
+        onSignUpClick = viewmodel::onRegisterClick,
+        onGoogleClick = viewmodel::onGoogleClick,
         onBackClick = onNavigateBack
     )
 }
@@ -53,12 +55,14 @@ fun RegisterScreenLayout(
     onEmailInput: (String) -> Unit,
     onPasswordInput: (String) -> Unit,
     onConfirmPasswordInput: (String) -> Unit,
+    onPasswordVisibilityToggle: () -> Unit,
+    onConfirmPasswordVisibilityToggle: () -> Unit,
+    isPasswordVisible : Boolean,
+    isConfirmPasswordVisible: Boolean,
     onSignUpClick: () -> Unit,
     onGoogleClick: () -> Unit,
     onBackClick: () -> Unit
 ) {
-    var passwordVisible by rememberSaveable{ mutableStateOf(false) }
-    var confirmPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -79,23 +83,26 @@ fun RegisterScreenLayout(
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                 EmailTextField(
                     value = uiState.email,
-                    onValueChange = onEmailInput
+                    onValueChange = onEmailInput,
+                    placeholder = "Email"
                 )
 
                 PasswordTextField(
                     value = uiState.password,
                     onValueChange = onPasswordInput,
                     label = "Password",
-                    passwordVisible = passwordVisible,
-                    onPasswordVisibilityToggle = { passwordVisible = !passwordVisible }
+                    placeholder = "Password",
+                    passwordVisible = isPasswordVisible,
+                    onPasswordVisibilityToggle = onPasswordVisibilityToggle
                 )
 
                 PasswordTextField(
                     value = uiState.confirmPassword,
                     onValueChange = onConfirmPasswordInput,
                     label = "Confirm Password",
-                    passwordVisible = confirmPasswordVisible,
-                    onPasswordVisibilityToggle = { confirmPasswordVisible = !confirmPasswordVisible }
+                    placeholder = "Confirm Password",
+                    passwordVisible = isConfirmPasswordVisible,
+                    onPasswordVisibilityToggle = onConfirmPasswordVisibilityToggle
                 )
             }
 
@@ -139,6 +146,10 @@ fun PreviewRegisterScreen() {
             onEmailInput = {},
             onPasswordInput = {},
             onConfirmPasswordInput = {},
+            onPasswordVisibilityToggle = {},
+            onConfirmPasswordVisibilityToggle = {},
+            isPasswordVisible = false,
+            isConfirmPasswordVisible = false,
             onSignUpClick = {},
             onGoogleClick = {},
             onBackClick = {}

@@ -9,6 +9,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.tpc.nudj.ui.navigation.ScreenRoute
 import com.tpc.nudj.ui.screen.DemoScreen
+import com.tpc.nudj.ui.screen.auth.register.RegisterScreen
 import com.tpc.nudj.ui.theme.NudjTheme
 import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
@@ -19,15 +20,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NudjTheme {
-                val backStack = rememberNavBackStack(ScreenRoute.App.DemoScreen)
-                NavDisplay(
-                    backStack = backStack,
-                    entryProvider = entryProvider {
-                        entry<ScreenRoute.App.DemoScreen> {
-                            DemoScreen()
-                        }
-                    }
-
+                RegisterScreen(
+                    onNavigateBack = { finish() } // Ya jo bhi navigation logic ho
                 )
 
             }

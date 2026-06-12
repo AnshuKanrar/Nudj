@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tpc.nudj.R
+import com.tpc.nudj.ui.components.LoadingIndicator
 import com.tpc.nudj.ui.components.NudjTopAppBar
 import com.tpc.nudj.ui.components.PrimaryButton
 import com.tpc.nudj.ui.components.TertiaryButton
@@ -28,12 +29,16 @@ fun EmailVerificationScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    EmailVerificationScreenLayout(
-        uiState = uiState,
-        onBackClick = onNavigateBack,
-        onCheckInboxClick = { viewModel.onCheckInboxClick() },
-        onResendEmailClick = { viewModel.onResendEmailClick() }
-    )
+    LoadingIndicator(
+        isLoading = uiState.isLoading
+    ) {
+        EmailVerificationScreenLayout(
+            uiState = uiState,
+            onBackClick = onNavigateBack,
+            onCheckInboxClick = { viewModel.onCheckInboxClick() },
+            onResendEmailClick = { viewModel.onResendEmailClick() }
+        )
+    }
 }
 
 @Composable
