@@ -1,6 +1,8 @@
 package com.tpc.nudj.ui.screen.auth.emailVerification
 
+import android.content.Intent
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -9,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,7 +38,6 @@ fun EmailVerificationScreen(
         EmailVerificationScreenLayout(
             uiState = uiState,
             onBackClick = onNavigateBack,
-            onCheckInboxClick = { viewModel.onCheckInboxClick() },
             onResendEmailClick = { viewModel.onResendEmailClick() }
         )
     }
@@ -45,9 +47,11 @@ fun EmailVerificationScreen(
 fun EmailVerificationScreenLayout(
     uiState: EmailVerificationUiState,
     onBackClick: () -> Unit,
-    onCheckInboxClick: () -> Unit,
     onResendEmailClick: () -> Unit
 ) {
+
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             NudjTopAppBar(onBackClick = onBackClick)
@@ -81,18 +85,49 @@ fun EmailVerificationScreenLayout(
 
             PrimaryButton(
                 text = "Check Inbox",
-                onClick = onCheckInboxClick,
+                onClick = {
+                    val inboxIntent = Intent(Intent.ACTION_MAIN).apply {
+                        addCategory(Intent.CATEGORY_APP_EMAIL)
+                    }
+
+                    val chooser = Intent.createChooser(inboxIntent, "Open Inbox via Gmail")
+
+                    try {
+                        context.startActivity(chooser)
+                    } catch (e: Exception){
+                        Toast.makeText(
+                            context,
+                            "Error:Inbox Not Opened",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                },
                 modifier = Modifier
                     .padding(bottom = 16.dp)
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+
+            Spacer(modifier = Modifier.height(16.dp) )
 
             TertiaryButton(
                 text = "Resend Email?",
-                onClick = onResendEmailClick
+                onClick = onResendEmailClick,
+                enabled = uiState.isResendEnabled
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if(!uiState.isResendEnabled){
+                Text(
+                    text = "Resend in ${uiState.timerInSeconds}s",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+            }
+
         }
+
     }
 }
 
@@ -104,7 +139,6 @@ fun PreviewEmailVerificationScreen() {
         EmailVerificationScreenLayout(
             uiState = EmailVerificationUiState(),
             onBackClick = {},
-            onCheckInboxClick = {},
             onResendEmailClick = {}
         )
     }
