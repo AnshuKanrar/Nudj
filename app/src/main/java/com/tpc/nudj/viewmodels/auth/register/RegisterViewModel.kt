@@ -1,12 +1,15 @@
 package com.tpc.nudj.viewmodels.auth.register
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.tpc.nudj.ui.screen.auth.register.RegisterUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,7 +30,14 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
         _registerUiState.update { it.copy(confirmPassword = newPassword) }
     }
 
-    fun onRegisterClick() {}
+    fun onRegisterClick() {
+
+        viewModelScope.launch {
+//            _registerUiState.update { it.copy(isLoading = true) }
+//            delay(2000)
+//            _registerUiState.update { it.copy(isLoading = false) }
+        }
+    }
 
     fun onGoogleClick() {}
 

@@ -3,6 +3,7 @@ package com.tpc.nudj.ui.screen.auth.register
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -20,7 +21,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tpc.nudj.R
+import com.tpc.nudj.model.AuthResult
 import com.tpc.nudj.ui.components.EmailTextField
+import com.tpc.nudj.ui.components.LoadingIndicator
 import com.tpc.nudj.ui.components.NudjTopAppBar
 import com.tpc.nudj.ui.components.PasswordTextField
 import com.tpc.nudj.ui.components.PrimaryButton
@@ -34,19 +37,23 @@ fun RegisterScreen(
 ) {
     val uiState by viewmodel.registerUiState.collectAsStateWithLifecycle()
 
-    RegisterScreenLayout(
-        uiState = uiState,
-        onEmailInput = { email -> viewmodel.onEmailChange(email) },
-        onPasswordInput = { pass -> viewmodel.onPasswordChange(pass) },
-        onConfirmPasswordInput = { pass -> viewmodel.onConfirmPasswordChange(pass) },
-        isPasswordVisible = uiState.isPasswordVisible,
-        isConfirmPasswordVisible = uiState.isConfirmPasswordVisible,
-        onPasswordVisibilityToggle = { viewmodel.onPasswordVisibilityToggle() },
-        onConfirmPasswordVisibilityToggle = { viewmodel.onConfirmPasswordVisibilityToggle() },
-        onSignUpClick = viewmodel::onRegisterClick,
-        onGoogleClick = viewmodel::onGoogleClick,
-        onBackClick = onNavigateBack
-    )
+    LoadingIndicator(
+        isLoading = uiState.isLoading
+    ) {
+        RegisterScreenLayout(
+            uiState = uiState,
+            onEmailInput = { email -> viewmodel.onEmailChange(email) },
+            onPasswordInput = { pass -> viewmodel.onPasswordChange(pass) },
+            onConfirmPasswordInput = { pass -> viewmodel.onConfirmPasswordChange(pass) },
+            isPasswordVisible = uiState.isPasswordVisible,
+            isConfirmPasswordVisible = uiState.isConfirmPasswordVisible,
+            onPasswordVisibilityToggle = { viewmodel.onPasswordVisibilityToggle() },
+            onConfirmPasswordVisibilityToggle = { viewmodel.onConfirmPasswordVisibilityToggle() },
+            onSignUpClick = viewmodel::onRegisterClick,
+            onGoogleClick = viewmodel::onGoogleClick,
+            onBackClick = onNavigateBack
+        )
+    }
 }
 
 @Composable

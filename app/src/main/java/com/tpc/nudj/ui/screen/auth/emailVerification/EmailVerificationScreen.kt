@@ -2,6 +2,7 @@ package com.tpc.nudj.ui.screen.auth.emailVerification
 
 import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,6 +10,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -24,6 +28,7 @@ import com.tpc.nudj.ui.components.PrimaryButton
 import com.tpc.nudj.ui.components.TertiaryButton
 import com.tpc.nudj.ui.theme.NudjTheme
 import com.tpc.nudj.viewmodels.auth.emailVerification.EmailVerificationViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun EmailVerificationScreen(
@@ -51,10 +56,15 @@ fun EmailVerificationScreenLayout(
 ) {
 
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val snackBarHostState = remember { SnackbarHostState() }
 
     Scaffold(
         topBar = {
             NudjTopAppBar(onBackClick = onBackClick)
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState)
         }
     ) { paddingValues ->
         Column(
@@ -88,6 +98,7 @@ fun EmailVerificationScreenLayout(
                 onClick = {
                     val inboxIntent = Intent(Intent.ACTION_MAIN).apply {
                         addCategory(Intent.CATEGORY_APP_EMAIL)
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     }
 
                     val chooser = Intent.createChooser(inboxIntent, "Open Inbox via Gmail")
@@ -95,11 +106,9 @@ fun EmailVerificationScreenLayout(
                     try {
                         context.startActivity(chooser)
                     } catch (e: Exception){
-                        Toast.makeText(
-                            context,
-                            "Error:Inbox Not Opened",
-                            Toast.LENGTH_LONG
-                        ).show()
+                        scope.launch {
+                            snackBarHostState.showSnackbar("No Email app found")
+                        }
                     }
                 },
                 modifier = Modifier
