@@ -29,7 +29,7 @@ data class AppColors(
 )
 private val LightColorScheme = AppColors(
     background = LightThemeBackgroundBlue,
-    onBackground = Color.Black,
+    onBackground = LightThemeDarkBlue,
     primaryButtonColor = LightThemeDarkBlue,
     secondaryButtonColor = Color.White,
     tertiaryButtonColor = LightThemeSeaBlue,
@@ -44,7 +44,7 @@ private val LightColorScheme = AppColors(
 
 private val DarkColorScheme = AppColors(
     background = DarkThemeBackgroundBlue,
-    onBackground = Color.White,
+    onBackground = DarkThemeSecondaryButtonColor,
     primaryButtonColor = DarkThemeDarkBlue,
     secondaryButtonColor = DarkThemeSecondaryButtonColor,
     tertiaryButtonColor = DarkThemeSeaBlue,
