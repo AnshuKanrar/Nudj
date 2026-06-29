@@ -4,6 +4,7 @@ import com.tpc.nudj.R
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,27 +12,28 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tpc.nudj.ui.components.LoadingIndicator
-import com.tpc.nudj.ui.components.NudjTopAppBar
 import androidx.compose.material3.SnackbarHost
 import com.tpc.nudj.viewmodels.auth.clubVerification.ClubVerificationViewModel
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import com.tpc.nudj.ui.components.PrimaryButton
 import com.tpc.nudj.ui.theme.LocalAppColors
 import com.tpc.nudj.ui.theme.NudjTheme
@@ -44,7 +46,6 @@ fun ClubVerificationScreen(
 ) {
     val clubVerificationUiState by viewModel.clubVerificationUiState.collectAsStateWithLifecycle()
 
-    // Snackbar Hosting
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -79,56 +80,69 @@ fun ClubVerificationScreenLayout(
 ) {
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState)},
-        containerColor = LocalAppColors.current.background,   // color changed to theme
-        topBar = {
-            NudjTopAppBar(onBackClick = onBackClick)
-        },
-
+        containerColor = LocalAppColors.current.background
     ) { paddingValues ->
-        Column(
+
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
+        ){
+            IconButton(
+                onClick = onBackClick,
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(10.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowLeft,
+                    contentDescription = "Back Button",
+                    tint = LocalAppColors.current.onBackground,
+                    modifier = Modifier.size(40.dp)
+                )
+            }
 
-            // Components Start's from Here
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
 
-            Text(
-                text = "Hang tight!",
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight(400),
-                color = LocalAppColors.current.onBackground // onBackground
-            )
+                Text(
+                    text = "Hang tight!",
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = LocalAppColors.current.onBackground
+                )
 
-            Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
-            Image(
-                painter = painterResource(id = R.drawable.meditating_mascot),
-                contentDescription = "Monkey Meditating Graphic",
-                modifier = Modifier.size(300.dp)
-            )
+                Image(
+                    painter = painterResource(id = R.drawable.meditating_mascot),
+                    contentDescription = "Monkey Meditating Graphic",
+                    modifier = Modifier.size(300.dp)
+                )
 
-            Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
-            Text(
-                text = "Your access is on the way",
-                style = MaterialTheme.typography.bodyLarge,
-                fontSize = 20.sp,
-                color = LocalAppColors.current.onBackground
-            )
-            Spacer(modifier = Modifier.height(48.dp))
-            PrimaryButton(
-                text = "Check Status",
-                onClick = onCheckStatusClick,
-                modifier = Modifier.fillMaxWidth(0.7f)
-            )
+                Text(
+                    text = "Your access is on the way",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = LocalAppColors.current.onBackground
+                )
+
+                Spacer(modifier = Modifier.height(48.dp))
+
+                PrimaryButton(
+                    text = "Check Status",
+                    onClick = onCheckStatusClick,
+                    modifier = Modifier.fillMaxWidth(0.7f)
+                )
+            }
         }
     }
 }
-
 
 @Preview(showBackground = true, name = "Light Mode")
 @Preview(

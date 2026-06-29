@@ -70,9 +70,6 @@ fun ClubLandingScreenLayout(
             verticalArrangement = Arrangement.Center
         ) {
 
-            // Components Start From Here
-
-
             Spacer(modifier = Modifier.weight(1f))
             Box(modifier = Modifier.scale(1.8f)) {
                 NudjLogo()
@@ -83,11 +80,9 @@ fun ClubLandingScreenLayout(
 
             Text(
                 text = "College Events Simplified",
-                style = MaterialTheme.typography.bodyLarge,
-                fontSize = 16.sp,
+                style = MaterialTheme.typography.bodyMedium,
                 color = LocalAppColors.current.onBackground
             )
-
 
             Spacer(modifier = Modifier.weight(1f))
             PrimaryButton(
